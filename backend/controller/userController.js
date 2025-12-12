@@ -26,7 +26,13 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
-    try { } catch (error) {
+    try {
+        const user = await User.findById(req.param.id).select("-password")
+        if (!user)
+            return res.status(404).json({ message: `Cannot find user with id ${req.param.id}` })
+
+        res.json(user)
+    } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message })
     }
 }
